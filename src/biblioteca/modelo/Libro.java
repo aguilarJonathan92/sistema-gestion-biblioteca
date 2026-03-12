@@ -5,7 +5,7 @@ import java.io.*;
  * Contiene informacion basica como titulo, edicion, editorial y anio,
  * ademas de la lista de prestamos asociados a ese libro.
  *
- * @author Grupo 1.1 Acuña Bruno
+ * @author Aguilar Jonathan
  * @version 1.0
  */
 public class Libro implements Serializable

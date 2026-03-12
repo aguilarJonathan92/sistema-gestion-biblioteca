@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
  * Contiene la informacion de la fecha de retiro, devolucion,
  * el socio que lo realizo y el libro prestado.
  *
- * @author Grupo 1.1 Acuña Alejo
+ * @author Aguilar Jonathan
  * @version 1.0
  */
 public class Prestamo implements Serializable
