@@ -1,0 +1,9 @@
+Arquitectura del Sistema
+
+ Interfaz de Gestión
+          ↓
+  Lógica de Negocio
+          ↓
+  Modelo de Dominio
+          ↓
+Persistencia de Datos
