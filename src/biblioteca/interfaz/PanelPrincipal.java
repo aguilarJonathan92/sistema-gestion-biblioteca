@@ -6,7 +6,7 @@ import java.awt.event.*;
 import com.formdev.flatlaf.FlatLightLaf;
 import biblioteca.gestion.GestionBiblioteca;
 
-public class PanelPrincipal extends JPanel {
+public class PanelPrincipal extends JFrame {
     // ******* Atributos *******
     private JPanel panelActual, panelContenido;
     private GestionBiblioteca controlador;
@@ -76,7 +76,7 @@ public class PanelPrincipal extends JPanel {
                 JOptionPane.QUESTION_MESSAGE); // Mostrar icono de pregunta
 
         if (respuesta == JOptionPane.YES_OPTION) {
-            controlador.salirYGuardar(); // Finaliza la aplicación de forma segura, guardando los datos en el archivo.
+            controlador.guardarYSalir(); // Finaliza la aplicación de forma segura, guardando los datos en el archivo.
             System.exit(0);
         }
 

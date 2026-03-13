@@ -3,7 +3,7 @@ package biblioteca;
 import javax.swing.SwingUtilities;
 
 import biblioteca.gestion.GestionBiblioteca;
-import interfaz.VentanaPrincipal;
+import biblioteca.interfaz.PanelPrincipal;
 
 public class MainApp {
     public static void main(String[] args) {
@@ -13,7 +13,7 @@ public class MainApp {
 
         // Iniciar interfaz gráfica
         SwingUtilities.invokeLater(() -> {
-            new VentanaPrincipal(controlador);
+            new PanelPrincipal(controlador);
         });
 
     }
