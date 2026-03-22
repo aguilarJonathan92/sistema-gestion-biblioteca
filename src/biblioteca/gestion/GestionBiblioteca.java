@@ -3,6 +3,7 @@ package biblioteca.gestion;
 import biblioteca.persistencia.Persistencia;
 import biblioteca.modelo.*;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.regex.Matcher;
@@ -106,7 +107,60 @@ public class GestionBiblioteca {
         bibliotecaActual.nuevoLibro(p_titulo, p_edicion, p_editorial, p_anio);
     }
 
+    public String obtenerDetallesLibro(String titulo) {
+        try {
+            ArrayList<Libro> libros = this.bibliotecaActual.getLibros();
 
+            Libro libroEncontrado = null;
+            for (Libro libro : libros) {
+                if (libro.getTitulo().equalsIgnoreCase(titulo.trim())) {
+                    libroEncontrado = libro;
+                    break;
+                }
+            }
+
+            if (libroEncontrado == null) {
+                return "Libro no encontrado";
+            }
+
+            StringBuilder detalles = new StringBuilder();
+            detalles.append("📚 Título: ").append(libroEncontrado.getTitulo()).append("\n");
+            detalles.append("📖 Edición: ").append(libroEncontrado.getEdicion()).append("\n");
+            detalles.append("🏢 Editorial: ").append(libroEncontrado.getEditorial()).append("\n");
+            detalles.append("📅 Año: ").append(libroEncontrado.getAnio()).append("\n\n");
+
+            if (libroEncontrado.prestado()) {
+                Prestamo prestamo = libroEncontrado.ultimoPrestamo();
+
+                if (prestamo != null && prestamo.getSocio() != null) {
+                    Socio socio = prestamo.getSocio();
+
+                    detalles.append("📌 ESTADO: PRESTADO\n\n");
+                    detalles.append("👤 Prestado a:\n");
+                    detalles.append("   • Nombre: ").append(socio.getNombre()).append("\n");
+                    detalles.append("   • DNI: ").append(socio.getDniSocio()).append("\n");
+                    detalles.append("   • Días prestado: ").append(socio.getDiasPrestamos()).append("\n\n");
+
+                    // 👇 USAR MÉTODO AUXILIAR
+                    detalles.append("📅 Fecha de préstamo: ")
+                            .append(formatearFecha(prestamo.getFechaRetiro()))
+                            .append("\n");
+                    detalles.append("📅 Fecha de devolución: ")
+                            .append(formatearFecha(prestamo.getFechaDevolucion()));
+                } else {
+                    detalles.append("📌 ESTADO: PRESTADO\n");
+                    detalles.append("⚠️ No se encontró información del préstamo actual");
+                }
+            } else {
+                detalles.append("📌 ESTADO: DISPONIBLE EN BIBLIOTECA ✅");
+            }
+
+            return detalles.toString();
+
+        } catch (Exception e) {
+            return "Error al obtener detalles: " + e.getMessage();
+        }
+    }
 
 
     public void prestarLibro(Calendar p_fechaRetiro, Socio p_socio,Libro p_libro){
@@ -117,6 +171,37 @@ public class GestionBiblioteca {
 
     }
 
+    public ArrayList<String[]> listaDeLibros(){
+        String listaLibros = this.bibliotecaActual.listaDeLibros();
+        ArrayList<String[]> datosLibros = new ArrayList<String[]>();
+        String[]lineas = listaLibros.split("\n"); //divido String por lineas
+        int numeroFila = 1;
+
+        for (String linea : lineas) {
+            // Ejemplo de línea: "1) Titulo: Java. Como Programar || Prestado: (No)"
+            if (linea.contains("Titulo:") && linea.contains("Prestado:")) {
+                // Extraer el título
+                String titulo = linea.substring(linea.indexOf("Titulo:") + 8, linea.indexOf("||")).trim();
+                // Extraer el estado de préstamo
+                String prestado = linea.substring(linea.indexOf("Prestado: (") + 11, linea.lastIndexOf(")")).trim();
+                // 👇 Convertir "Si"/"No" a formato visual con emojis
+                String estadoFormateado;
+                if (prestado.equalsIgnoreCase("Si")) {
+                    estadoFormateado = "PRESTADO 🚫";
+                } else {
+                    estadoFormateado = "DISPONIBLE ✅";
+                }
+                // Guardar el resultado como array
+                datosLibros.add(new String[]{
+                        String.valueOf(numeroFila),
+                        titulo,
+                        estadoFormateado
+                });
+                numeroFila++;
+            }
+        }
+        return datosLibros;
+    }
     //Metodos para tablas
 
     /**
@@ -202,5 +287,12 @@ public class GestionBiblioteca {
             // Si el patrón no coincide (por ejemplo, lista vacía o formato cambiado)
             return "No hay datos de resumen disponibles.";
         }
+    }
+    private String formatearFecha(Calendar fecha) {
+        if (fecha == null) {
+            return "No devolvió hasta la fecha";
+        }
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        return formato.format(fecha.getTime());
     }
 }
