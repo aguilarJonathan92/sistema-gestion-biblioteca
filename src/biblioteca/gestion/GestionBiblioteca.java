@@ -30,7 +30,29 @@ public class GestionBiblioteca {
     public void registrarEstudiante(int p_dniSocio,String p_nombre,String p_carrera){
         bibliotecaActual.nuevoSocioEstudiante(p_dniSocio, p_nombre, p_carrera);
     }
-
+    /**
+     * Elimina un socio del sistema.
+     * @param dni DNI del socio a eliminar
+     * @return true si se eliminó exitosamente, false si no se encontró
+     * @throws IllegalArgumentException Si el socio tiene préstamos activos
+     */
+    public boolean eliminarSocio(int dni) throws IllegalArgumentException {
+        Socio socio = buscarSocioPorDni(dni);
+        if (socio == null) {
+            return false; // No existe el socio
+        }
+        // Verificar que no tenga préstamos activos
+        if (socio.cantLibrosPrestados() > 0) {
+            throw new IllegalArgumentException(
+                    "No se puede eliminar el socio " + socio.getNombre() +
+                            " porque tiene " + socio.cantLibrosPrestados() + " préstamo(s) activo(s)"
+            );
+        }
+        return this.bibliotecaActual.quitarSocio(socio);
+    }
+    public Socio buscarSocioPorDni(int dni){
+        return this.bibliotecaActual.buscarSocio(dni);
+    }
 
     // Metodos para docentes
     public void registrarDocente(int p_dniSocio,String p_nombre,String p_area){

@@ -416,7 +416,7 @@ public class PanelListadoSocio extends JPanel {
             int dni = Integer.parseInt(dniStr.trim());
 
             // Procesar eliminación a través del controlador
-            boolean eliminado = true;//controlador.eliminarSocio(dni);
+            boolean eliminado = controlador.eliminarSocio(dni);
 
             if (eliminado) {
                 // Mensaje de éxito
