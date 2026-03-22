@@ -41,10 +41,6 @@ public class PanelNavegacion extends JPanel{
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Layout vertical para el menu lateral
         setBackground(PaletaColores.COLOR_SECUNDARIO); // Color Azul Índigo Oscuro
         setPreferredSize(new Dimension(ANCHO_SIDEBAR, 1000)); // menu lateral con ancho fijo y altura total de la ventana
-
-        //JPanel header = crearEncabezado();
-        //header.setAlignmentX(Component.CENTER_ALIGNMENT);
-        //add(header);
         add(crearEncabezado());
     }
 
@@ -63,8 +59,8 @@ public class PanelNavegacion extends JPanel{
         add(btnSocio);
 
         panelSubSocios = crearSubmenuContainer(
-                //crearSubBoton("Listar Socios", e -> ventana.mostrarPanel(new PanelListadoSocio(controlador))),
-               // crearSubBoton("Registrar Socio", e -> ventana.mostrarPanel(new PanelCargaSocio(controlador)))
+                crearSubBoton("Listar Socios", e -> ventana.mostrarPanel(new PanelListadoSocio(controlador))),
+                crearSubBoton("Registrar Socio", e -> ventana.mostrarPanel(new PanelCargaSocio(controlador)))
         );
         add(panelSubSocios);
         add(crearSeparador());
