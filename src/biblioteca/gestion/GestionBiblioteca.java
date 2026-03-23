@@ -1,5 +1,6 @@
 package biblioteca.gestion;
 
+import biblioteca.excepciones.LibroNoPrestadoException;
 import biblioteca.persistencia.Persistencia;
 import biblioteca.modelo.*;
 
@@ -331,5 +332,46 @@ public class GestionBiblioteca {
         }
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         return formato.format(fecha.getTime());
+    }
+    /**
+     * Obtiene la lista de TODOS los libros que están actualmente prestados.
+     * @return ArrayList con los datos formateados para la tabla [Nro, Título, Estado]
+     */
+    public ArrayList<String[]> obtenerLibrosPrestados() {
+        ArrayList<String[]> librosPrestados = new ArrayList<>();
+        ArrayList<String[]> todosLosLibros = listaDeLibros();
+        int contador = 1;
+        // Filtrar solo los que están prestados
+        for (String[] libro : todosLosLibros) {
+            // libro[2] contiene el estado: "PRESTADO 🚫" o "DISPONIBLE ✅"
+            if (libro[2].contains("PRESTADO")) {
+                // Crear nueva fila con número correlativo
+                librosPrestados.add(new String[]{
+                        String.valueOf(contador),
+                        libro[1], // Título
+                        libro[2]  // Estado
+                });
+                contador++;
+            }
+        }
+        return librosPrestados;
+    }
+    /**
+     * Procesa la devolución de un libro.
+     * @param tituloLibro Título del libro a devolver
+     * @throws IllegalArgumentException Si el libro no existe o no está prestado
+     */
+    public void procesarDevolucion(String tituloLibro) throws IllegalArgumentException {
+        try {
+            // Buscar el libro por título
+            Libro libro = buscarLibroPorTitulo(tituloLibro);
+            if (libro == null) {
+                throw new IllegalArgumentException("El libro '" + tituloLibro + "' no fue encontrado en el sistema");
+            }
+            this.bibliotecaActual.devolverLibro(libro);
+        } catch (LibroNoPrestadoException e) {
+            // Convertir la excepción específica en IllegalArgumentException para la GUI
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 }

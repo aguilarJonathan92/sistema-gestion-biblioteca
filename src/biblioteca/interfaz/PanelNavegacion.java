@@ -73,8 +73,8 @@ public class PanelNavegacion extends JPanel{
         panelSubLibros = crearSubmenuContainer(
                 crearSubBoton("Registrar Nuevo Libro", e -> ventana.mostrarPanel(new PanelCargaLibro(controlador))),
                 crearSubBoton("Listado de Libros", e -> ventana.mostrarPanel(new PanelListadoLibro(controlador))),
-                crearSubBoton("Prestar Libro", e -> ventana.mostrarPanel(new PanelPrestamo(controlador)))
-                //crearSubBoton("Devolver Libro", e -> ventana.mostrarPanel(new PanelDevolucion(controlador)))
+                crearSubBoton("Prestar Libro", e -> ventana.mostrarPanel(new PanelPrestamo(controlador))),
+                crearSubBoton("Devolver Libro", e -> ventana.mostrarPanel(new PanelDevolucion(controlador)))
         );
         add(panelSubLibros);
         add(crearSeparador());
