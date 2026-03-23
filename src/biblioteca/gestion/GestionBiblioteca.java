@@ -6,6 +6,7 @@ import biblioteca.modelo.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -161,14 +162,24 @@ public class GestionBiblioteca {
             return "Error al obtener detalles: " + e.getMessage();
         }
     }
-
-
-    public void prestarLibro(Calendar p_fechaRetiro, Socio p_socio,Libro p_libro){
-
+    public Libro buscarLibroPorTitulo(String titulo) {
+        // Obtenemos la lista maestra de libros de la capa de Negocio.
+        ArrayList<Libro> libros = this.bibliotecaActual.getLibros();
+        if (libros == null) {
+            return null; // No hay inventario.
+        }
+        // Iteramos sobre los objetos Libro para encontrar la coincidencia por título
+        for (Libro libro : libros) {
+            if (libro.getTitulo().equalsIgnoreCase(titulo.trim())) {
+                return libro; // Devuelve el objeto Libro encontrado
+            }
+        }
+        return null;
     }
-
-    public void devolverLibro(Libro p_libro){
-
+    public void registrarNuevoPrestamo(Date p_fecha, Socio socio, Libro libro) throws IllegalArgumentException {
+        Calendar fecha = Calendar.getInstance();
+        fecha.setTime(p_fecha);
+        this.bibliotecaActual.prestarLibro(fecha, socio, libro);
     }
 
     public ArrayList<String[]> listaDeLibros(){
