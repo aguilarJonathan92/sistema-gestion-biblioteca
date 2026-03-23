@@ -5,6 +5,7 @@ import biblioteca.modelo.*;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -55,6 +56,9 @@ public class GestionBiblioteca {
     public Socio buscarSocioPorDni(int dni){
         return this.bibliotecaActual.buscarSocio(dni);
     }
+    public int obtenerSociosPorTipo(String p_tipo){
+        return this.bibliotecaActual.cantidadDeSociosPorTipo(p_tipo);
+    }
 
     // Metodos para docentes
     public void registrarDocente(int p_dniSocio,String p_nombre,String p_area){
@@ -102,6 +106,20 @@ public class GestionBiblioteca {
         return false;
     }
 
+    public String[] listaDeDocentesResponsables(){
+        String listaCompleta = this.bibliotecaActual.listaDeDocentesResponsables();
+        String[] lineas = listaCompleta.split("\n");
+        if (lineas.length > 1) {
+            // Crear un nuevo array que comienza desde el índice 2 (ahi comienza la lista de docentes)
+            // lineas.length es el índice del final (exclusivo)
+            String[] lineasFiltradas = Arrays.copyOfRange(lineas, 2, lineas.length);
+            return lineasFiltradas;
+        }
+
+        // Si solo hay una línea o está vacío, devolver un array vacío o el original (según la necesidad)
+        // En este caso, si solo hay una línea (que asumimos es el encabezado), devolvemos vacío.
+        return new String[0];
+    }
     //metodos para libros
 
     public void registrarLibro(String p_titulo,int p_edicion,String p_editorial,int  p_anio){
@@ -212,6 +230,14 @@ public class GestionBiblioteca {
             }
         }
         return datosLibros;
+    }
+    public int obtenerCantidadLibrosRegistrados(){
+        return this.bibliotecaActual.getLibros().size();
+    }
+    public String[] listaDeTitulos(){
+        String listaCompleta = this.bibliotecaActual.listaDeTitulos();
+        String[] lineas =listaCompleta.split("\n");
+        return lineas;
     }
     //Metodos para tablas
 
